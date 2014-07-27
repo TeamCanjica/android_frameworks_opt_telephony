@@ -24,6 +24,8 @@ import static android.telephony.TelephonyManager.NETWORK_TYPE_UMTS;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSDPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSUPA;
 import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPA;
+import static android.telephony.TelephonyManager.NETWORK_TYPE_HSPAP;
+import static android.telephony.TelephonyManager.NETWORK_TYPE_DCHSPAP;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -3509,12 +3511,14 @@ public class RIL extends BaseCommands implements CommandsInterface {
         ret = new ArrayList<OperatorInfo>(strings.length / mQANElements);
 
         for (int i = 0 ; i < strings.length ; i += mQANElements) {
-            ret.add (
-                new OperatorInfo(
+            OperatorInfo o = new OperatorInfo(
                     strings[i+0],
                     strings[i+1],
                     strings[i+2],
-                    strings[i+3]));
+                    strings[i+3]);
+            if (!ret.contains(o)){
+                ret.add (o);
+            }
         }
 
         return ret;
@@ -3546,6 +3550,10 @@ public class RIL extends BaseCommands implements CommandsInterface {
            radioType = NETWORK_TYPE_HSUPA;
        } else if (radioString.equals("HSPA")) {
            radioType = NETWORK_TYPE_HSPA;
+       } else if (radioString.equals("HSPAP")) {
+           radioType = NETWORK_TYPE_HSPAP;
+       } else if (radioString.equals("DCHSPAP")) {
+           radioType = NETWORK_TYPE_DCHSPAP;
        } else {
            radioType = NETWORK_TYPE_UNKNOWN;
        }
